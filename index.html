@@ -8,19 +8,305 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body { font-family: 'Prompt', sans-serif; background-color: #f0f4f8; margin: 0; padding: 10px; }
-    .report-title { font-size: 24px; font-weight: 700; color: #333; text-align: center; background-color: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,.1); margin-bottom: 20px; transition: all .3s ease; }
-    #searchContainer{ display:flex; flex-direction:column; align-items:flex-start; margin-bottom:20px; }
-    .filter-row{ display:flex; flex-wrap:wrap; align-items:center; margin-bottom:10px; gap:10px; }
-    .search-row{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:10px; }
-    #plantCallFilterLabel,#plantFilterLabel,#statusFilterLabel{ font-size:16px; color:#333; }
-    #plantCallFilter,#plantFilter,#statusFilter{ padding:10px; border-radius:8px; border:1px solid #ccc; font-size:16px; background:#fff; cursor:pointer; transition:all .3s ease; }
-    #plantCallFilter:hover,#plantFilter:hover,#statusFilter:hover{ border-color:#2980b9; }
-    #searchInput{ width:100%; max-width:300px; padding:12px; border-radius:12px; border:1px solid #ccc; font-size:16px; transition:all .3s ease; }
-    #searchInput:focus{ border-color:#2980b9; box-shadow:0 0 8px rgba(41,128,185,.3); outline:none; }
-    .action-button{ display:flex; align-items:center; gap:8px; padding:10px 16px; background:linear-gradient(135deg,#3498db,#2980b9); color:#fff; border:none; border-radius:12px; cursor:pointer; font-size:14px; font-weight:500; transition:all .3s ease; box-shadow:0 4px 8px rgba(0,0,0,.1); flex:1; min-width:120px; justify-content:center; }
-    .action-button i{ font-size:18px; }
-    .action-button:hover{ background:linear-gradient(135deg,#2980b9,#1c6ea4); transform:scale(1.05); box-shadow:0 6px 12px rgba(0,0,0,.15); }
-    .action-button:active{ transform:scale(.95); }
+    .report-title { 
+      font-size: 28px; 
+      font-weight: 700; 
+      color: #fff; 
+      text-align: center; 
+      background: linear-gradient(135deg, #007bff, #0056b3); 
+      padding: 20px; 
+      border-radius: 15px; 
+      box-shadow: 0 6px 15px rgba(0,123,255,.3); 
+      margin-bottom: 25px; 
+      transition: all .3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .report-title::before {
+      content: '\f021'; /* fa-cogs */
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 32px;
+      opacity: 0.8;
+    }
+    .report-title span { 
+      display: inline-block;
+      margin-left: 45px;
+    }
+    #searchContainer{ 
+      display:flex; 
+      flex-direction:column; 
+      align-items:flex-start; 
+      margin-bottom:20px; 
+    }
+    /* ===== FILTER ROWS - คงเดิม ===== */
+    .filter-row{ 
+      display:flex; 
+      flex-wrap:wrap; 
+      align-items:center; 
+      margin-bottom:12px; 
+      gap:12px; 
+      background: linear-gradient(135deg, #ffffff, #f8f9ff);
+      padding: 12px 16px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,123,255,.10), inset 0 1px 0 rgba(255,255,255,.8);
+      border: 1px solid rgba(0,123,255,.15);
+      position: relative;
+      overflow: hidden;
+      transition: all .4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .filter-row::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #007bff, #00c6ff, #007bff);
+      border-radius: 16px 16px 0 0;
+    }
+    .filter-row:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,123,255,.15), inset 0 1px 0 rgba(255,255,255,.9);
+    }
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 180px;
+      position: relative;
+    }
+    .filter-icon {
+      color: #007bff;
+      font-size: 14px;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #007bff, #00c6ff);
+      color: white;
+      border-radius: 50%;
+      padding: 3px;
+      box-shadow: 0 3px 10px rgba(0,123,255,.3);
+      transition: all .3s ease;
+    }
+    .filter-group:hover .filter-icon {
+      transform: scale(1.1) rotate(10deg);
+      box-shadow: 0 5px 14px rgba(0,123,255,.4);
+    }
+    #plantCallFilterLabel,#plantFilterLabel,#statusFilterLabel{ 
+      font-size:16px; 
+      color:#2c3e50; 
+      font-weight: 700;
+      white-space: nowrap;
+      text-shadow: 0 1px 2px rgba(0,0,0,.1);
+    }
+    #plantCallFilter,#plantFilter,#statusFilter{ 
+      flex: 1;
+      padding:8px 12px; 
+      border-radius:10px; 
+      border:2px solid #e3f2fd; 
+      font-size:13px; 
+      background:linear-gradient(135deg, #ffffff, #f8f9ff); 
+      cursor:pointer; 
+      transition:all .3s cubic-bezier(0.4, 0, 0.2, 1);
+      min-width: 160px;
+      box-shadow: 0 3px 10px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.6);
+      position: relative;
+      overflow: hidden;
+    }
+    #plantCallFilter::before,#plantFilter::before,#statusFilter::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent);
+      transition: left .5s;
+    }
+    #plantCallFilter:hover::before,#plantFilter:hover::before,#statusFilter:hover::before {
+      left: 100%;
+    }
+    #plantCallFilter:hover,#plantFilter:hover,#statusFilter:hover{ 
+      border-color:#007bff; 
+      box-shadow: 0 5px 16px rgba(0,123,255,.18), inset 0 1px 0 rgba(255,255,255,.8);
+      transform: translateY(-1px);
+    }
+    #plantCallFilter:focus,#plantFilter:focus,#statusFilter:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0,123,255,.12), 0 5px 16px rgba(0,123,255,.18);
+      outline: none;
+      transform: translateY(-1px);
+    }
+    /* ===== COUNT INFO - คงเดิม ===== */
+    .count-info {
+      display: flex;
+      gap: 12px;
+      margin-left: auto;
+    }
+    .workorder-count-box{ 
+      padding:10px 16px; 
+      background:linear-gradient(135deg, #e8f5e8, #d4edda); 
+      color:#2e7d32; 
+      border-radius: 14px; 
+      font-size:15px; 
+      font-weight:700; 
+      display:inline-flex; 
+      align-items:center; 
+      box-shadow:0 5px 16px rgba(40,167,69,.18), inset 0 1px 0 rgba(255,255,255,.8); 
+      transition:all .3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(40,167,69,.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .workorder-count-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #28a745, #4caf50);
+      border-radius: 14px 14px 0 0;
+    }
+    .workorder-count-box:hover {
+      transform: translateY(-1px);
+      box-shadow:0 6px 20px rgba(40,167,69,.25);
+    }
+    .workorder-count-box i { 
+      margin-right: 6px; 
+      color: #28a745; 
+      font-size: 16px;
+      animation: pulse 2s infinite;
+    }
+    .workorder-count-box span{ 
+      color:#d32f2f; 
+      margin:0 5px; 
+      font-size:18px; 
+      text-shadow: 0 1px 2px rgba(0,0,0,.1);
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    /* ===== SEARCH ROW - คงเดิม ===== */
+    .search-row{ 
+      display:flex; 
+      flex-wrap:wrap; 
+      align-items:center; 
+      gap:10px; 
+      margin-top:12px; 
+      background: linear-gradient(135deg, #ffffff, #f8f9ff);
+      padding: 14px 18px; 
+      border-radius: 16px; 
+      box-shadow: 0 6px 20px rgba(0,123,255,.10), inset 0 1px 0 rgba(255,255,255,.8); 
+      border: 1px solid rgba(0,123,255,.15);
+      position: relative;
+      overflow: hidden;
+      transition: all .4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .search-row::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #007bff, #00c6ff, #007bff);
+      border-radius: 16px 16px 0 0;
+    }
+    .search-row:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,123,255,.15);
+    }
+    #searchInput{ 
+      flex: 1;
+      min-width: 300px;
+      padding:12px 16px; 
+      border-radius:14px; 
+      border:2px solid #e3f2fd; 
+      font-size:14px; 
+      transition:all .3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      background:linear-gradient(135deg, #ffffff, #f8f9ff);
+      box-shadow: 0 3px 10px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.6);
+    }
+    #searchInput::placeholder {
+      color: #90a4ae;
+      font-style: italic;
+    }
+    #searchInput:focus{ 
+      border-color:#007bff; 
+      box-shadow:0 0 0 3px rgba(0,123,255,.12), 0 5px 16px rgba(0,123,255,.18); 
+      outline:none; 
+      transform: translateY(-1px);
+    }
+    /* ===== ACTION BUTTONS - คงเดิม ===== */
+    .action-button{ 
+      display:flex; 
+      align-items:center; 
+      justify-content:center;
+      gap:6px; 
+      padding:12px 18px; 
+      background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+      color:#fff; 
+      border:none; 
+      border-radius:14px; 
+      cursor:pointer; 
+      font-size:13px; 
+      font-weight:600; 
+      transition:all .3s cubic-bezier(0.4, 0, 0.2, 1); 
+      box-shadow:0 5px 16px rgba(102,126,234,.25), inset 0 1px 0 rgba(255,255,255,.2); 
+      min-width:120px; 
+      position: relative;
+      overflow: hidden;
+    }
+    .action-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.2), transparent);
+      transition: left .6s;
+    }
+    .action-button:hover::before {
+      left: 100%;
+    }
+    .action-button i{ 
+      font-size:16px; 
+      transition: all .3s ease;
+    }
+    .action-button:hover{ 
+      background:linear-gradient(135deg, #5a6fd8, #6b46a0); 
+      transform:translateY(-3px) scale(1.02); 
+      box-shadow:0 8px 25px rgba(102,126,234,.35); 
+    }
+    .action-button:active{ 
+      transform:scale(.98); 
+    }
+    #excelButton {
+      background:linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+      box-shadow:0 5px 16px rgba(86,171,47,.25);
+    }
+    #excelButton:hover {
+      background:linear-gradient(135deg, #4d9627, #95d6b8);
+      box-shadow:0 8px 25px rgba(86,171,47,.35);
+    }
+    #summaryButton {
+      background:linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      box-shadow:0 5px 16px rgba(245,87,108,.25);
+    }
+    #summaryButton:hover {
+      background:linear-gradient(135deg, #e882f2, #e04e60);
+      box-shadow:0 8px 25px rgba(245,87,108,.35);
+    }
+    /* ===== ตารางหลัก - คงเดิม ===== */
     .table-container{ overflow-x:auto; width:100%; }
     table{ width:100%; border-collapse:collapse; background:#fff; box-shadow:0 4px 6px rgba(0,0,0,.1); border-radius:12px; overflow:hidden; min-width:1600px; }
     th,td{ padding:6px 10px; text-align:left; border:1px solid #ccc; white-space:normal; word-wrap:break-word; font-size:14px; }
@@ -40,9 +326,19 @@
     th.sortable{ cursor:pointer; }
     th.sortable:hover{ background:#0056b3; }
     .arrow{ font-size:12px; margin-left:5px; }
-    tr:hover{ background:#f1f1f1; }
+    tr:hover{ background:#f1f1f1 !important; }
+    /* ===== สีใหม่ตาม WorkOrder - คงเดิม ===== */
+    .wo-color-0 { background: #e3f2fd !important; }
+    .wo-color-1 { background: #f3e5f5 !important; }
+    .wo-color-2 { background: #e8f5e8 !important; }
+    .wo-color-3 { background: #fff3e0 !important; }
+    .wo-color-4 { background: #f1f8e9 !important; }
+    .wo-color-5 { background: #fce4ec !important; }
+    .wo-color-6 { background: #e0f2f1 !important; }
+    .wo-color-7 { background: #f5f5f5 !important; }
     .detail-button{ padding:6px 10px; background:#3498db; color:#fff; border:none; width:100px; border-radius:6px; cursor:pointer; transition:all .3s ease; font-size:12px; }
     .detail-button:hover{ background:#2980b9; transform:translateY(-2px); box-shadow:0 4px 10px rgba(0,0,0,.1); }
+    /* ===== ส่วนอื่น ๆ คงเดิมทั้งหมด ===== */
     .modal{ display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto; background:rgba(0,0,0,.5); }
     .modal-content{ background:#fff; margin:5% auto; padding:30px; border-radius:15px; width:95%; max-width:950px; animation:fadeIn .4s ease; overflow-y:auto; max-height:85vh; position:relative; background: linear-gradient(135deg, #ffffff, #f9fbfd); box-shadow: 0 10px 20px rgba(0,0,0,.15); }
     .close{ color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer; transition: color .3s ease; }
@@ -64,13 +360,9 @@
     tr:nth-child(odd){ animation-delay:.2s; }
     @keyframes fadeInUp{ to{ opacity:1; transform:translateY(0); } }
     @keyframes fadeIn{ from{ opacity:0; transform:scale(.9); } to{ opacity:1; transform:scale(1); } }
-    .yellow-light{ background:#c9ffc4; }
-    .pink-pastel{ background:#fce4ec; }
     .text-left{ text-align:left; }
     .text-center{ text-align:center; }
-    .workorder-count-box{ padding:10px 16px; background:#e6f2ff; color:#007bff; border-radius:10px; font-size:16px; font-weight:bold; display:inline-flex; align-items:center; box-shadow:0 2px 4px rgba(0,0,0,.05); transition:background .3s ease; }
-    .workorder-count-box span{ color:#d63384; margin:0 4px; font-size:18px; }
-    .modern-label{ display:inline-block; padding:10px 16px; background:#fff; color:#007bff; border-radius:10px; font-size:16px; font-weight:bold; box-shadow:0 2px 6px rgba(0,0,0,.1); border:1px solid #d0eaff; transition:all .3s ease; margin-right:8px; }
+    .modern-label{ display:inline-block; padding:8px 12px; background:#fff; color:#007bff; border-radius:8px; font-size:14px; font-weight:bold; box-shadow:0 2px 6px rgba(0,0,0,.1); border:1px solid #d0eaff; transition:all .3s ease; margin-right:6px; }
     .modern-label:hover{ background:#e6f2ff; color:#0056b3; }
     .detail-table{ width:100%; border-collapse:collapse; margin-top:10px; }
     .detail-table th,.detail-table td{ padding:8px; border:1px solid #ddd; text-align:center; background:#f9fbfd; }
@@ -136,7 +428,6 @@
     .summary-table tr:last-child td {
       border-bottom: none;
     }
-    /* ===== สไตล์ใหม่สำหรับ Detail Modal Table (สบายตา ไม่เลื่อนแนวนอน) ===== */
     .detail-summary-table {
       width: 100%;
       table-layout: auto;
@@ -185,23 +476,8 @@
       border-bottom: none;
     }
     .detail-summary-table .status-success { color: #28a745; font-weight: bold; }
-    .detail-summary-table .status-wait { color: #dc3545; font-weight: bold; }
-    @media (max-width: 768px) {
-      .detail-summary-table {
-        font-size: 13px;
-        margin-top: 15px;
-      }
-      .detail-summary-table td {
-        padding: 10px 8px;
-      }
-      .detail-summary-table td:first-child {
-        min-width: 120px;
-      }
-      .detail-summary-table td:nth-child(2) {
-        min-width: 180px;
-      }
-    }
-    /* ===== Overrides สำหรับตารางสรุปรอส่งเคลม ===== */
+    .detail-summary-table .status-sent { color: #28a745; font-weight: bold; }
+    .detail-summary-table .status-transport { color: #dc3545; font-weight: bold; } /* ===== ใหม่: ระหว่างขนส่ง = ส้มเข้ม ===== */
     #summaryModal .modal-content {
       max-width: 950px;
       overflow-x: auto;
@@ -274,15 +550,19 @@
     .detail-table th:nth-child(n+4),.detail-table td:nth-child(n+4){ width:10%; min-width:80px; max-width:100px; text-align:center; }
     @media (max-width: 768px){
       body { padding: 5px; }
-      .report-title{ font-size:20px; padding:10px; }
+      .report-title{ font-size:22px; padding:15px; }
+      .report-title::before { font-size: 24px; left: 15px; }
+      .report-title span { margin-left: 35px; }
       th,td{ padding:4px 6px; font-size:12px; }
       .detail-button{ width:80px; font-size:10px; padding:4px 8px; }
-      #searchInput{ width:100%; }
-      .search-row{ flex-direction:column; align-items:stretch; }
+      #searchInput{ width:100%; min-width: auto; }
+      .search-row{ flex-direction:column; align-items:stretch; gap:10px; }
       .action-button{ width:100%; min-width:auto; }
-      .filter-row{ flex-direction:column; align-items:flex-start; gap:5px; }
-      .modern-label{ margin-right:0; padding:8px 12px; font-size:14px; }
-      .workorder-count-box{ font-size:14px; padding:8px 12px; }
+      .filter-row{ flex-direction:column; align-items:flex-start; gap:10px; padding: 12px 16px; }
+      .filter-group { min-width: 100%; }
+      #plantCallFilter,#plantFilter,#statusFilter { min-width: 100%; }
+      .modern-label{ margin-right:0; padding:6px 10px; font-size:12px; }
+      .workorder-count-box{ font-size:13px; padding:8px 12px; }
       .pagination{ flex-direction:column; gap:10px; }
       .items-per-page{ margin-left:0; margin-top:10px; }
       .modal-content{ margin:2% auto; width:98%; padding:15px; max-height:90vh; }
@@ -298,24 +578,43 @@
   </style>
 </head>
 <body>
-  <h1 class="report-title">รายการอะไหล่รับคืน TSC Dummy</h1>
+  <h1 class="report-title"><span>รายการอะไหล่รับคืน TSC Dummy</span></h1>
   <div id="searchContainer">
     <div class="filter-row">
-      <label id="plantCallFilterLabel" for="plantCallFilter" class="modern-label">คลังพื้นที่</label>
-      <select id="plantCallFilter"><option value="">ทั้งหมด</option></select>
-      <div id="workOrderCountInfo" class="workorder-count-box">จำนวน WorkOrder: <span id="workOrderCountValue">0</span></div>
+      <div class="filter-group">
+        <i class="fas fa-warehouse filter-icon"></i>
+        <label id="plantCallFilterLabel" for="plantCallFilter" class="modern-label">คลังพื้นที่</label>
+        <select id="plantCallFilter"><option value="">ทั้งหมด</option></select>
+      </div>
+      <div class="count-info">
+        <div id="workOrderCountInfo" class="workorder-count-box">
+          <i class="fas fa-file-alt"></i>
+          จำนวน WorkOrder: <span id="workOrderCountValue">0</span>
+        </div>
+      </div>
     </div>
     <div class="filter-row">
-      <label id="plantFilterLabel" for="plantFilter" class="modern-label">คลังรับคืน</label>
-      <select id="plantFilter"><option value="">ทั้งหมด</option></select>
-      <div id="rowCountInfo" class="workorder-count-box">จำนวนรายการ <span id="rowCountValue">0</span> รายการ</div>
+      <div class="filter-group">
+        <i class="fas fa-archive filter-icon"></i>
+        <label id="plantFilterLabel" for="plantFilter" class="modern-label">คลังรับคืน</label>
+        <select id="plantFilter"><option value="">ทั้งหมด</option></select>
+      </div>
+      <div class="count-info">
+        <div id="rowCountInfo" class="workorder-count-box">
+          <i class="fas fa-list"></i>
+          จำนวนรายการ <span id="rowCountValue">0</span> รายการ
+        </div>
+      </div>
     </div>
     <div class="filter-row">
-      <label id="statusFilterLabel" for="statusFilter" class="modern-label">Status</label>
-      <select id="statusFilter"><option value="">ทั้งหมด</option></select>
+      <div class="filter-group">
+        <i class="fas fa-tags filter-icon"></i>
+        <label id="statusFilterLabel" for="statusFilter" class="modern-label">Status</label>
+        <select id="statusFilter"><option value="">ทั้งหมด</option></select>
+      </div>
     </div>
     <div class="search-row">
-      <input type="text" id="searchInput" placeholder="ค้นหา วันที่รับคืน, Spare Part Code, Spare Part Name, Store Name, Store Code, อุปกรณ์, WorkOrder, Serial ซ่อม, Serial คืน, TIDแจ้งซ่อม, TID คืน, อาการ, รหัสช่าง, ชื่อช่าง, คลังพื้นที่, คลังรับคืน, หมายเหตุ, วันที่ส่งขนส่ง, วันที่คลังกลางรับ, วันที่ส่งเคลม TSC, Status..." />
+      <input type="text" id="searchInput" placeholder="🔍 ค้นหา วันที่รับ, Code, Description, รหัสร้าน, Store Name, อุปกรณ์, WorkOrder, Serial ซ่อม, Serial คืน, TID ซ่อม, TID คืน, อาการ, รหัสช่าง, ชื่อช่าง, คลังพื้นที่, คลังรับคืน, หมายเหตุ, ขนส่ง, นวนคร, ส่งTSC, Status..." />
       <button id="searchButton" class="action-button"><i class="fas fa-search"></i> ค้นหา</button>
       <button id="excelButton" class="action-button"><i class="fas fa-file-excel"></i> Excel</button>
       <button id="summaryButton" class="action-button"><i class="fas fa-chart-bar"></i> สรุปรอส่งเคลม</button>
@@ -326,17 +625,17 @@
       <thead>
         <tr>
           <th class="sortable" data-column="Status">Status <span class="arrow"></span></th>
-          <th class="sortable" data-column="DateKeep">วันที่รับคืน <span class="arrow"></span></th>
-          <th class="sortable" data-column="Spare Part Code">Spare Part Code <span class="arrow"></span></th>
-          <th class="sortable" data-column="Spare Part Name">Spare Part Name <span class="arrow"></span></th>
+          <th class="sortable" data-column="DateKeep">วันที่รับ <span class="arrow"></span></th>
+          <th class="sortable" data-column="Spare Part Code">Code <span class="arrow"></span></th>
+          <th class="sortable" data-column="Spare Part Name">Description <span class="arrow"></span></th>
           <th class="sortable" data-column="Qty">Qty <span class="arrow"></span></th>
           <th class="sortable" data-column="Store Name">Store Name <span class="arrow"></span></th>
-          <th class="sortable" data-column="Store Code">Store Code <span class="arrow"></span></th>
+          <th class="sortable" data-column="Store Code">รหัสร้าน <span class="arrow"></span></th>
           <th class="sortable" data-column="อุปกรณ์">อุปกรณ์ <span class="arrow"></span></th>
           <th class="sortable" data-column="WorkOrder">WorkOrder <span class="arrow"></span></th>
           <th class="sortable" data-column="Serial Old">Serial ซ่อม <span class="arrow"></span></th>
           <th class="sortable" data-column="SerialKeep">Serial คืน <span class="arrow"></span></th>
-          <th class="sortable" data-column="TIDCall">TIDแจ้งซ่อม <span class="arrow"></span></th>
+          <th class="sortable" data-column="TIDCall">TID ซ่อม <span class="arrow"></span></th>
           <th class="sortable" data-column="TID">TID คืน <span class="arrow"></span></th>
           <th class="sortable" data-column="อาการ">อาการ <span class="arrow"></span></th>
           <th class="sortable" data-column="รหัสช่าง">รหัสช่าง <span class="arrow"></span></th>
@@ -344,9 +643,9 @@
           <th class="sortable" data-column="PlantCall">คลังพื้นที่ <span class="arrow"></span></th>
           <th class="sortable" data-column="Plant">คลังรับคืน <span class="arrow"></span></th>
           <th class="sortable" data-column="Note">หมายเหตุ <span class="arrow"></span></th>
-          <th class="sortable" data-column="DateDelivery">วันที่ส่งขนส่ง <span class="arrow"></span></th>
-          <th class="sortable" data-column="DateCenter">วันที่คลังกลางรับ <span class="arrow"></span></th>
-          <th class="sortable" data-column="DeliveryTSC_Detail">วันที่ส่งเคลม TSC <span class="arrow"></span></th>
+          <th class="sortable" data-column="DateDelivery">ขนส่ง <span class="arrow"></span></th>
+          <th class="sortable" data-column="DateCenter">นวนคร <span class="arrow"></span></th>
+          <th class="sortable" data-column="DeliveryTSC_Detail">ส่งTSC <span class="arrow"></span></th>
           <th>ดูรายละเอียด</th>
         </tr>
       </thead>
@@ -388,6 +687,7 @@
     </div>
   </div>
   <script>
+    // ===== JavaScript - ปรับ Status ส้มเข้มเท่านั้น =====
     const sheetID = '1A2N5hGjeFljUMa9ouWvlioSIcdj-SpZA708fUczhNV8';
     const sheetName = 'WebTSCDummy';
     const url = `https://opensheet.elk.sh/${sheetID}/${sheetName}`;
@@ -416,15 +716,13 @@
     let itemsPerPage = 20;
     let sortConfig = { column: 'DateKeep', direction: 'desc' };
     let currentRowData = null;
-
     function parseDate(dateStr) {
-      if (!dateStr || typeof dateStr !== 'string') return new Date(0); // ใช้วันที่เริ่มต้นหากไม่มีข้อมูล
-      const parts = dateStr.match(/(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2}):(\d{2})/); // ปรับให้เข้มงวดกับรูปแบบ DD/MM/YYYY HH:MM:SS
-      if (!parts) return new Date(0); // ถ้าไม่ตรงรูปแบบ ใช้วันที่เริ่มต้น
+      if (!dateStr || typeof dateStr !== 'string') return new Date(0);
+      const parts = dateStr.match(/(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2}):(\d{2})/);
+      if (!parts) return new Date(0);
       const [, day, month, year, hour, minute, second] = parts;
       return new Date(parseInt(year), parseInt(month) - 1, parseInt(day), parseInt(hour), parseInt(minute), parseInt(second));
     }
-
     function escapeCSVValue(value) {
       if (value == null) return '""';
       const stringValue = value.toString();
@@ -433,7 +731,6 @@
       }
       return stringValue;
     }
-
     function exportToCSV() {
       if (!allData || allData.length === 0) { alert("ไม่มีข้อมูลในระบบสำหรับการส่งออก CSV"); return; }
       const selectedPlantCall = plantCallFilter.value;
@@ -484,17 +781,17 @@
       const columns = ["Status","DateKeep","Spare Part Code","Spare Part Name","Qty","Store Name","Store Code","อุปกรณ์","WorkOrder","Serial Old","SerialKeep","TIDCall","TID","อาการ","รหัสช่าง","ชื่อช่าง","PlantCall","Plant","Note","DateDelivery","DateCenter","DeliveryTSC_Detail"];
       const displayColumns = {
         "Status":"Status",
-        "DateKeep":"วันที่รับคืน",
-        "Spare Part Code":"Spare Part Code",
-        "Spare Part Name":"Spare Part Name",
+        "DateKeep":"วันที่รับ",
+        "Spare Part Code":"Code",
+        "Spare Part Name":"Description",
         "Qty":"Qty",
         "Store Name":"Store Name",
-        "Store Code":"Store Code",
+        "Store Code":"รหัสร้าน",
         "อุปกรณ์":"อุปกรณ์",
         "WorkOrder":"WorkOrder",
         "Serial Old":"Serial ซ่อม",
         "SerialKeep":"Serial คืน",
-        "TIDCall":"TIDแจ้งซ่อม",
+        "TIDCall":"TID ซ่อม",
         "TID":"TID คืน",
         "อาการ":"อาการ",
         "รหัสช่าง":"รหัสช่าง",
@@ -502,9 +799,9 @@
         "PlantCall":"คลังพื้นที่",
         "Plant":"คลังรับคืน",
         "Note":"หมายเหตุ",
-        "DateDelivery":"วันที่ส่งขนส่ง",
-        "DateCenter":"วันที่คลังกลางรับ",
-        "DeliveryTSC_Detail":"วันที่ส่งเคลม TSC"
+        "DateDelivery":"ขนส่ง",
+        "DateCenter":"นวนคร",
+        "DeliveryTSC_Detail":"ส่งTSC"
       };
       const csvRows = [];
       csvRows.push(columns.map(col => `"${displayColumns[col]}"`).join(','));
@@ -525,8 +822,12 @@
       link.click();
       URL.revokeObjectURL(link.href);
     }
-
     function generateSummary() {
+      const currentPlantCall = plantCallFilter.value;
+      const currentPlant = plantFilter.value;
+      const currentStatus = statusFilter.value;
+      const currentSearch = searchInput.value;
+      
       if (!allData || allData.length === 0) {
         alert("ไม่มีข้อมูลในระบบสำหรับการสรุป");
         return;
@@ -544,7 +845,7 @@
         }
         summaryMap.get(key).totalQty += qty;
       });
-      let html = '<table class="summary-table"><thead><tr><th>Spare Part Code</th><th>Spare Part Name</th><th>จำนวนรวม</th></tr></thead><tbody>';
+      let html = '<table class="summary-table"><thead><tr><th>Code</th><th>Description</th><th>จำนวนรวม</th></tr></thead><tbody>';
       summaryMap.forEach(({ code, name, totalQty }) => {
         html += `<tr><td>${code}</td><td style="text-align: left;">${name}</td><td>${totalQty.toFixed(0)}</td></tr>`;
       });
@@ -555,15 +856,14 @@
       summaryContent.innerHTML = html;
       summaryModal.style.display = "block";
     }
-
     function printModalContent() {
       if (!currentRowData) { alert("ไม่พบข้อมูลสำหรับการพิมพ์"); return; }
       const modalData = currentRowData;
       const stickerContent = `
-        <div><span class="label">วันที่รับคืน:</span> <span class="value">${modalData["DateKeep"] || "-"}</span></div>
+        <div><span class="label">วันที่รับ:</span> <span class="value">${modalData["DateKeep"] || "-"}</span></div>
         <div><span class="label">WorkOrder:</span> <span class="value">${modalData["WorkOrder"] || "-"}</span></div>
-        <div><span class="label">Spare Part Code:</span> <span class="value">${modalData["Spare Part Code"] || "-"}</span></div>
-        <div><span class="label">Spare Part Name:</span> <span class="value">${modalData["Spare Part Name"] || "-"}</span></div>
+        <div><span class="label">Code:</span> <span class="value">${modalData["Spare Part Code"] || "-"}</span></div>
+        <div><span class="label">Description:</span> <span class="value">${modalData["Spare Part Name"] || "-"}</span></div>
         <div><span class="label">Qty:</span> <span class="value">${modalData["Qty"] || "-"}</span></div>
         <div><span class="label">Store Name:</span> <span class="value">${modalData["Store Name"] || "-"}</span></div>
         <div><span class="label">Serial ซ่อม:</span> <span class="value">${modalData["Serial Old"] || "-"}</span></div>
@@ -599,22 +899,17 @@
       `);
       printWindow.document.close();
     }
-
-    // ปิดโมดัล
     closeModal.onclick = () => { modal.style.display = "none"; currentRowData = null; };
     closeSummaryModal.onclick = () => { summaryModal.style.display = "none"; };
     window.onclick = e => {
       if (e.target == modal) { modal.style.display = "none"; currentRowData = null; }
       if (e.target == summaryModal) { summaryModal.style.display = "none"; }
     };
-
-    // ปุ่มต่าง ๆ
     excelButton.addEventListener("click", exportToCSV);
     summaryButton.addEventListener("click", generateSummary);
     itemsPerPageSelect.addEventListener("change", e => { itemsPerPage = parseInt(e.target.value); currentPage = 1; filterAndRenderTable(); });
     searchInput.addEventListener("keypress", e => { if (e.key === "Enter") filterAndRenderTable(); });
     searchButton.addEventListener("click", filterAndRenderTable);
-
     function populatePlantCallFilter(data) {
       if (!data || data.length === 0) return;
       const plantCalls = [...new Set(data.map(row => row["PlantCall"]).filter(Boolean))].sort();
@@ -626,7 +921,6 @@
         plantCallFilter.appendChild(option);
       });
     }
-
     function updatePlantFilter(data, selectedPlantCall) {
       if (!data || data.length === 0) return;
       const currentPlantValue = plantFilter.value;
@@ -643,7 +937,6 @@
       else plantFilter.value = "";
       updateStatusFilter(data, selectedPlantCall, plantFilter.value);
     }
-
     function updateStatusFilter(data, selectedPlantCall, selectedPlant) {
       if (!data || data.length === 0) return;
       const currentStatusValue = statusFilter.value;
@@ -661,7 +954,6 @@
       if (currentStatusValue && statuses.includes(currentStatusValue)) statusFilter.value = currentStatusValue;
       else statusFilter.value = "";
     }
-
     function addSortListeners() {
       const sortableHeaders = document.querySelectorAll("th.sortable");
       sortableHeaders.forEach(header => {
@@ -678,7 +970,6 @@
         });
       });
     }
-
     function updateSortArrows() {
       const sortableHeaders = document.querySelectorAll("th.sortable");
       sortableHeaders.forEach(header => {
@@ -687,7 +978,6 @@
         arrow.textContent = (column === sortConfig.column) ? (sortConfig.direction === 'asc' ? '↑' : '↓') : '';
       });
     }
-
     function filterAndRenderTable() {
       const selectedPlantCall = plantCallFilter.value;
       const selectedPlant = plantFilter.value;
@@ -730,7 +1020,6 @@
       const uniqueWorkOrders = [...new Set(filteredData.map(row => row["WorkOrder"]).filter(Boolean))].length;
       document.getElementById("workOrderCountValue").textContent = uniqueWorkOrders;
       document.getElementById("rowCountValue").textContent = filteredData.length;
-
       if (sortConfig.column) {
         filteredData.sort((a, b) => {
           let valueA = a[sortConfig.column] || "";
@@ -739,7 +1028,7 @@
           if (dateColumns.includes(sortConfig.column)) {
             let dateA = parseDate(valueA);
             let dateB = parseDate(valueB);
-            if (isNaN(dateA.getTime())) dateA = new Date(0); // ใช้วันที่เริ่มต้นถ้าแปลงไม่สำเร็จ
+            if (isNaN(dateA.getTime())) dateA = new Date(0);
             if (isNaN(dateB.getTime())) dateB = new Date(0);
             return sortConfig.direction === 'asc' ? dateA - dateB : dateB - dateA;
           } else if (sortConfig.column === 'Qty') {
@@ -768,11 +1057,9 @@
       }
       renderTable(filteredData);
     }
-
     plantCallFilter.addEventListener("change", filterAndRenderTable);
     plantFilter.addEventListener("change", filterAndRenderTable);
     statusFilter.addEventListener("change", filterAndRenderTable);
-
     function renderTable(data) {
       tableBody.innerHTML = '';
       if (!data || data.length === 0) {
@@ -782,6 +1069,8 @@
       const startIdx = (currentPage - 1) * itemsPerPage;
       const endIdx = startIdx + itemsPerPage;
       const paginatedData = data.slice(startIdx, endIdx);
+      
+      // ===== สร้าง WorkOrder Hash สำหรับสีใหม่ =====
       const workOrderGroups = {};
       data.forEach(row => {
         const wo = row["WorkOrder"];
@@ -790,12 +1079,15 @@
       });
       const uniqueWorkOrders = Object.keys(workOrderGroups).sort();
       const colorMap = {};
-      uniqueWorkOrders.forEach((wo, index) => { colorMap[wo] = index % 2 === 0 ? "yellow-light" : "pink-pastel"; });
+      uniqueWorkOrders.forEach((wo, index) => { 
+        colorMap[wo] = `wo-color-${index % 8}`; // 8 สีสลับกัน
+      });
+      
       paginatedData.forEach((row, i) => {
         const tr = document.createElement("tr");
         tr.style.animationDelay = `${i * 0.05}s`;
         const wo = row["WorkOrder"];
-        tr.className = colorMap[wo] || "yellow-light";
+        tr.className = colorMap[wo] || "wo-color-0"; // ใช้สีตาม WorkOrder
         const columns = ["Status","DateKeep","Spare Part Code","Spare Part Name","Qty","Store Name","Store Code","อุปกรณ์","WorkOrder","Serial Old","SerialKeep","TIDCall","TID","อาการ","รหัสช่าง","ชื่อช่าง","PlantCall","Plant","Note","DateDelivery","DateCenter","DeliveryTSC_Detail"];
         columns.forEach(col => {
           const td = document.createElement("td");
@@ -804,9 +1096,30 @@
           if (col === "Qty") {
             displayValue = isNaN(parseFloat(displayValue)) ? "-" : parseFloat(displayValue).toFixed(0);
           } else if (col === "Status") {
-            if (cellValue === "สำเร็จ") { displayValue = "สำเร็จ"; td.style.color = "#28a745"; td.style.fontWeight = "bold"; }
-            else if (cellValue.includes("รอ")) { displayValue = cellValue; td.style.color = "#dc3545"; td.style.fontWeight = "bold"; }
-            else { td.style.color = "#6c757d"; }
+            /* ===== ปรับใหม่: เพิ่ม ระหว่างขนส่ง = ส้มเข้ม ===== */
+            if (cellValue === "สำเร็จ") { 
+              displayValue = "สำเร็จ"; 
+              td.style.color = "#28a745"; 
+              td.style.fontWeight = "bold"; 
+            }
+            else if (cellValue === "ส่งTSCแล้ว") { 
+              displayValue = "ส่งTSCแล้ว"; 
+              td.style.color = "#28a745"; 
+              td.style.fontWeight = "bold"; 
+            }
+            else if (cellValue === "ระหว่างขนส่ง") { 
+              displayValue = "ระหว่างขนส่ง"; 
+              td.style.color = "#fd7e14"; 
+              td.style.fontWeight = "bold"; 
+            }
+            else if (cellValue.includes("รอ")) { 
+              displayValue = cellValue; 
+              td.style.color = "#dc3545"; 
+              td.style.fontWeight = "bold"; 
+            }
+            else { 
+              td.style.color = "#6c757d"; 
+            }
           }
           td.textContent = displayValue;
           td.classList.add("text-left");
@@ -820,17 +1133,17 @@
           currentRowData = row;
           const displayFields = {
             "Status": "Status",
-            "DateKeep": "วันที่รับคืน",
-            "Spare Part Code": "Spare Part Code",
-            "Spare Part Name": "Spare Part Name",
+            "DateKeep": "วันที่รับ",
+            "Spare Part Code": "Code",
+            "Spare Part Name": "Description",
             "Qty": "Qty",
             "Store Name": "Store Name",
-            "Store Code": "Store Code",
+            "Store Code": "รหัสร้าน",
             "อุปกรณ์": "อุปกรณ์",
             "WorkOrder": "WorkOrder",
             "Serial Old": "Serial ซ่อม",
             "SerialKeep": "Serial คืน",
-            "TIDCall": "TIDแจ้งซ่อม",
+            "TIDCall": "TID ซ่อม",
             "TID": "TID คืน",
             "อาการ": "อาการ",
             "รหัสช่าง": "รหัสช่าง",
@@ -838,9 +1151,9 @@
             "PlantCall": "คลังพื้นที่",
             "Plant": "คลังรับคืน",
             "Note": "หมายเหตุ",
-            "DateDelivery": "วันที่ส่งขนส่ง",
-            "DateCenter": "วันที่คลังกลางรับ",
-            "DeliveryTSC_Detail": "วันที่ส่งเคลม TSC"
+            "DateDelivery": "ขนส่ง",
+            "DateCenter": "นวนคร",
+            "DeliveryTSC_Detail": "ส่งTSC"
           };
           let html = '<table class="detail-summary-table"><tbody>';
           Object.entries(displayFields).forEach(([key, label]) => {
@@ -848,7 +1161,10 @@
             if (key === "Qty") value = isNaN(parseFloat(value)) ? "-" : parseFloat(value).toFixed(0);
             let valueHtml = value;
             if (key === "Status") {
+              /* ===== ปรับใหม่: เพิ่ม ระหว่างขนส่ง = ส้มเข้มใน Modal ===== */
               if (value === "สำเร็จ") valueHtml = '<span class="status-success">สำเร็จ</span>';
+              else if (value === "ส่งTSCแล้ว") valueHtml = '<span class="status-sent">ส่งTSCแล้ว</span>';
+              else if (value === "ระหว่างขนส่ง") valueHtml = '<span class="status-transport">ระหว่างขนส่ง</span>';
               else if (value.includes("รอ")) valueHtml = `<span class="status-wait">${value}</span>`;
             }
             html += `<tr><td>${label}:</td><td>${valueHtml}</td></tr>`;
@@ -863,7 +1179,6 @@
       });
       updatePagination(data.length);
     }
-
     function updatePagination(totalItems) {
       const totalPages = Math.ceil(totalItems / itemsPerPage);
       currentPage = Math.min(currentPage, totalPages);
@@ -890,8 +1205,6 @@
       nextPageButton.onclick = () => { if (currentPage < totalPages) { currentPage++; filterAndRenderTable(); } };
       lastPageButton.onclick = () => { currentPage = totalPages; filterAndRenderTable(); };
     }
-
-    // โหลดข้อมูลครั้งแรก
     fetch(url)
       .then(r => r.json())
       .then(data => {
