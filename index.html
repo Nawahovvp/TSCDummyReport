@@ -8,22 +8,22 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body { font-family: 'Prompt', sans-serif; background-color: #f0f4f8; margin: 0; padding: 10px; }
-    .report-title { 
-      font-size: 28px; 
-      font-weight: 700; 
-      color: #fff; 
-      text-align: center; 
-      background: linear-gradient(135deg, #007bff, #0056b3); 
-      padding: 20px; 
-      border-radius: 15px; 
-      box-shadow: 0 6px 15px rgba(0,123,255,.3); 
-      margin-bottom: 25px; 
+    .report-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      text-align: center;
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 6px 15px rgba(0,123,255,.3);
+      margin-bottom: 25px;
       transition: all .3s ease;
       position: relative;
       overflow: hidden;
     }
     .report-title::before {
-      content: '\f021'; /* fa-cogs */
+      content: '\f021';
       font-family: 'Font Awesome 6 Free';
       font-weight: 900;
       position: absolute;
@@ -33,23 +33,22 @@
       font-size: 32px;
       opacity: 0.8;
     }
-    .report-title span { 
+    .report-title span {
       display: inline-block;
       margin-left: 45px;
     }
-    #searchContainer{ 
-      display:flex; 
-      flex-direction:column; 
-      align-items:flex-start; 
-      margin-bottom:20px; 
+    #searchContainer{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      margin-bottom:20px;
     }
-    /* ===== FILTER ROWS - คงเดิม ===== */
-    .filter-row{ 
-      display:flex; 
-      flex-wrap:wrap; 
-      align-items:center; 
-      margin-bottom:12px; 
-      gap:12px; 
+    .filter-row{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-bottom:12px;
+      gap:12px;
       background: linear-gradient(135deg, #ffffff, #f8f9ff);
       padding: 12px 16px;
       border-radius: 16px;
@@ -97,21 +96,21 @@
       transform: scale(1.1) rotate(10deg);
       box-shadow: 0 5px 14px rgba(0,123,255,.4);
     }
-    #plantCallFilterLabel,#plantFilterLabel,#statusFilterLabel{ 
-      font-size:16px; 
-      color:#2c3e50; 
+    #plantCallFilterLabel,#plantFilterLabel,#statusFilterLabel{
+      font-size:16px;
+      color:#2c3e50;
       font-weight: 700;
       white-space: nowrap;
       text-shadow: 0 1px 2px rgba(0,0,0,.1);
     }
-    #plantCallFilter,#plantFilter,#statusFilter{ 
+    #plantCallFilter,#plantFilter,#statusFilter{
       flex: 1;
-      padding:8px 12px; 
-      border-radius:10px; 
-      border:2px solid #e3f2fd; 
-      font-size:13px; 
-      background:linear-gradient(135deg, #ffffff, #f8f9ff); 
-      cursor:pointer; 
+      padding:8px 12px;
+      border-radius:10px;
+      border:2px solid #e3f2fd;
+      font-size:13px;
+      background:linear-gradient(135deg, #ffffff, #f8f9ff);
+      cursor:pointer;
       transition:all .3s cubic-bezier(0.4, 0, 0.2, 1);
       min-width: 160px;
       box-shadow: 0 3px 10px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.6);
@@ -131,8 +130,8 @@
     #plantCallFilter:hover::before,#plantFilter:hover::before,#statusFilter:hover::before {
       left: 100%;
     }
-    #plantCallFilter:hover,#plantFilter:hover,#statusFilter:hover{ 
-      border-color:#007bff; 
+    #plantCallFilter:hover,#plantFilter:hover,#statusFilter:hover{
+      border-color:#007bff;
       box-shadow: 0 5px 16px rgba(0,123,255,.18), inset 0 1px 0 rgba(255,255,255,.8);
       transform: translateY(-1px);
     }
@@ -142,22 +141,21 @@
       outline: none;
       transform: translateY(-1px);
     }
-    /* ===== COUNT INFO - คงเดิม ===== */
     .count-info {
       display: flex;
       gap: 12px;
       margin-left: auto;
     }
-    .workorder-count-box{ 
-      padding:10px 16px; 
-      background:linear-gradient(135deg, #e8f5e8, #d4edda); 
-      color:#2e7d32; 
-      border-radius: 14px; 
-      font-size:15px; 
-      font-weight:700; 
-      display:inline-flex; 
-      align-items:center; 
-      box-shadow:0 5px 16px rgba(40,167,69,.18), inset 0 1px 0 rgba(255,255,255,.8); 
+    .workorder-count-box{
+      padding:10px 16px;
+      background:linear-gradient(135deg, #e8f5e8, #d4edda);
+      color:#2e7d32;
+      border-radius: 14px;
+      font-size:15px;
+      font-weight:700;
+      display:inline-flex;
+      align-items:center;
+      box-shadow:0 5px 16px rgba(40,167,69,.18), inset 0 1px 0 rgba(255,255,255,.8);
       transition:all .3s cubic-bezier(0.4, 0, 0.2, 1);
       border: 1px solid rgba(40,167,69,.2);
       position: relative;
@@ -177,33 +175,32 @@
       transform: translateY(-1px);
       box-shadow:0 6px 20px rgba(40,167,69,.25);
     }
-    .workorder-count-box i { 
-      margin-right: 6px; 
-      color: #28a745; 
+    .workorder-count-box i {
+      margin-right: 6px;
+      color: #28a745;
       font-size: 16px;
       animation: pulse 2s infinite;
     }
-    .workorder-count-box span{ 
-      color:#d32f2f; 
-      margin:0 5px; 
-      font-size:18px; 
+    .workorder-count-box span{
+      color:#d32f2f;
+      margin:0 5px;
+      font-size:18px;
       text-shadow: 0 1px 2px rgba(0,0,0,.1);
     }
     @keyframes pulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.1); }
     }
-    /* ===== SEARCH ROW - คงเดิม ===== */
-    .search-row{ 
-      display:flex; 
-      flex-wrap:wrap; 
-      align-items:center; 
-      gap:10px; 
-      margin-top:12px; 
+    .search-row{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:10px;
+      margin-top:12px;
       background: linear-gradient(135deg, #ffffff, #f8f9ff);
-      padding: 14px 18px; 
-      border-radius: 16px; 
-      box-shadow: 0 6px 20px rgba(0,123,255,.10), inset 0 1px 0 rgba(255,255,255,.8); 
+      padding: 14px 18px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,123,255,.10), inset 0 1px 0 rgba(255,255,255,.8);
       border: 1px solid rgba(0,123,255,.15);
       position: relative;
       overflow: hidden;
@@ -223,13 +220,13 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(0,123,255,.15);
     }
-    #searchInput{ 
+    #searchInput{
       flex: 1;
       min-width: 300px;
-      padding:12px 16px; 
-      border-radius:14px; 
-      border:2px solid #e3f2fd; 
-      font-size:14px; 
+      padding:12px 16px;
+      border-radius:14px;
+      border:2px solid #e3f2fd;
+      font-size:14px;
       transition:all .3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       background:linear-gradient(135deg, #ffffff, #f8f9ff);
@@ -239,29 +236,28 @@
       color: #90a4ae;
       font-style: italic;
     }
-    #searchInput:focus{ 
-      border-color:#007bff; 
-      box-shadow:0 0 0 3px rgba(0,123,255,.12), 0 5px 16px rgba(0,123,255,.18); 
-      outline:none; 
+    #searchInput:focus{
+      border-color:#007bff;
+      box-shadow:0 0 0 3px rgba(0,123,255,.12), 0 5px 16px rgba(0,123,255,.18);
+      outline:none;
       transform: translateY(-1px);
     }
-    /* ===== ACTION BUTTONS - คงเดิม ===== */
-    .action-button{ 
-      display:flex; 
-      align-items:center; 
+    .action-button{
+      display:flex;
+      align-items:center;
       justify-content:center;
-      gap:6px; 
-      padding:12px 18px; 
-      background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-      color:#fff; 
-      border:none; 
-      border-radius:14px; 
-      cursor:pointer; 
-      font-size:13px; 
-      font-weight:600; 
-      transition:all .3s cubic-bezier(0.4, 0, 0.2, 1); 
-      box-shadow:0 5px 16px rgba(102,126,234,.25), inset 0 1px 0 rgba(255,255,255,.2); 
-      min-width:120px; 
+      gap:6px;
+      padding:12px 18px;
+      background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color:#fff;
+      border:none;
+      border-radius:14px;
+      cursor:pointer;
+      font-size:13px;
+      font-weight:600;
+      transition:all .3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow:0 5px 16px rgba(102,126,234,.25), inset 0 1px 0 rgba(255,255,255,.2);
+      min-width:120px;
       position: relative;
       overflow: hidden;
     }
@@ -278,17 +274,17 @@
     .action-button:hover::before {
       left: 100%;
     }
-    .action-button i{ 
-      font-size:16px; 
+    .action-button i{
+      font-size:16px;
       transition: all .3s ease;
     }
-    .action-button:hover{ 
-      background:linear-gradient(135deg, #5a6fd8, #6b46a0); 
-      transform:translateY(-3px) scale(1.02); 
-      box-shadow:0 8px 25px rgba(102,126,234,.35); 
+    .action-button:hover{
+      background:linear-gradient(135deg, #5a6fd8, #6b46a0);
+      transform:translateY(-3px) scale(1.02);
+      box-shadow:0 8px 25px rgba(102,126,234,.35);
     }
-    .action-button:active{ 
-      transform:scale(.98); 
+    .action-button:active{
+      transform:scale(.98);
     }
     #excelButton {
       background:linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
@@ -306,7 +302,6 @@
       background:linear-gradient(135deg, #e882f2, #e04e60);
       box-shadow:0 8px 25px rgba(245,87,108,.35);
     }
-    /* ===== ตารางหลัก - คงเดิม ===== */
     .table-container{ overflow-x:auto; width:100%; }
     table{ width:100%; border-collapse:collapse; background:#fff; box-shadow:0 4px 6px rgba(0,0,0,.1); border-radius:12px; overflow:hidden; min-width:1600px; }
     th,td{ padding:6px 10px; text-align:left; border:1px solid #ccc; white-space:normal; word-wrap:break-word; font-size:14px; }
@@ -327,7 +322,6 @@
     th.sortable:hover{ background:#0056b3; }
     .arrow{ font-size:12px; margin-left:5px; }
     tr:hover{ background:#f1f1f1 !important; }
-    /* ===== สีใหม่ตาม WorkOrder - คงเดิม ===== */
     .wo-color-0 { background: #e3f2fd !important; }
     .wo-color-1 { background: #f3e5f5 !important; }
     .wo-color-2 { background: #e8f5e8 !important; }
@@ -338,7 +332,6 @@
     .wo-color-7 { background: #f5f5f5 !important; }
     .detail-button{ padding:6px 10px; background:#3498db; color:#fff; border:none; width:100px; border-radius:6px; cursor:pointer; transition:all .3s ease; font-size:12px; }
     .detail-button:hover{ background:#2980b9; transform:translateY(-2px); box-shadow:0 4px 10px rgba(0,0,0,.1); }
-    /* ===== ส่วนอื่น ๆ คงเดิมทั้งหมด ===== */
     .modal{ display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto; background:rgba(0,0,0,.5); }
     .modal-content{ background:#fff; margin:5% auto; padding:30px; border-radius:15px; width:95%; max-width:950px; animation:fadeIn .4s ease; overflow-y:auto; max-height:85vh; position:relative; background: linear-gradient(135deg, #ffffff, #f9fbfd); box-shadow: 0 10px 20px rgba(0,0,0,.15); }
     .close{ color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer; transition: color .3s ease; }
@@ -373,61 +366,102 @@
     .detail-table th:nth-child(2), .detail-table td:nth-child(2) {
       width: 40%; min-width: 200px; max-width: 350px; white-space: normal; text-align: left;
     }
-    .summary-table {
-      width: 100%;
-      table-layout: auto;
+    /* ===== 🔥 PIVOT TABLE - ปรับใหม่ 100% สมดุลกับ Modal 70vw 🔥 ===== */
+    .pivot-table {
+      width: 100% !important;
+      table-layout: fixed !important;
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
       margin-top: 20px;
-      font-size: 16px;
+      font-size: 14px;
       border-collapse: collapse;
+      background: #fff;
     }
-    .summary-table th {
+    .pivot-table th, .pivot-table td {
+      padding: 10px 4px !important;
+      box-sizing: border-box;
+      border: 1px solid #ddd;
+      color: #333;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    .pivot-table th {
       background: linear-gradient(135deg, #007bff, #0056b3);
       color: #fff;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
       border: 1px solid #0056b3;
-      padding: 12px 8px;
-      font-size: 16px;
+      padding: 12px 4px !important;
+      font-size: 13px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
-    .summary-table td {
-      border: 1px solid #ddd;
-      padding: 12px 8px;
-      color: #333;
-    }
-    .summary-table th:first-child, .summary-table td:first-child {
-      width: 20%;
-      text-align: center;
-      min-width: 100px;
-    }
-    .summary-table th:nth-child(2), .summary-table td:nth-child(2) {
-      width: 60%;
-      min-width: 150px;
-      white-space: normal;
+    /* ===== 🔥 DESKTOP: Code 5% | Description 14% | Status 9% (รวม) = 100% 🔥 ===== */
+    .pivot-table th:first-child,
+    .pivot-table td:first-child { /* Code */
+      width: 5% !important;
       text-align: left;
-      word-break: break-word;
-      overflow-wrap: break-word;
-      max-width: 400px;
+      background: transparent !important;
+      min-width: 40px !important;
+      max-width: 50px !important;
+      font-size: 12px !important;
+      padding: 12px 4px !important;
     }
-    .summary-table th:nth-child(3), .summary-table td:nth-child(3) {
-      width: 20%;
-      min-width: 70px;
-      text-align: center;
+    .pivot-table th:nth-child(2),
+    .pivot-table td:nth-child(2) { /* Description */
+      width: 14% !important;
+      text-align: left;
+      background: transparent !important;
+      min-width: 120px !important;
+      max-width: 150px !important;
+      font-size: 12px !important;
+      padding: 12px 6px !important;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    .summary-table tr:nth-child(even) {
-      background: #fff;
+    /* ===== Status columns - 9% ต่อคอลัมน์ (สมดุล) ===== */
+    .pivot-table th:not(:first-child):not(:nth-child(2)),
+    .pivot-table td:not(:first-child):not(:nth-child(2)) {
+      width: 9% !important;
+      min-width: 70px !important;
+      max-width: 80px !important;
+      font-size: 13px !important;
+      font-weight: bold;
     }
-    .summary-table tr:hover {
-      background: #e6f0fa;
+    /* ===== หัวคอลัม Code + Description = น้ำเงิน ===== */
+    .pivot-table th:first-child, .pivot-table th:nth-child(2) {
+      background: linear-gradient(135deg, #007bff, #0056b3) !important;
+      color: #fff !important;
+      width: auto !important;
+    }
+    .pivot-table .status-success { background: #d4edda !important; color: #155724; font-weight: bold; }
+    .pivot-table .status-sent { background: #d1ecf1 !important; color: #0c5460; font-weight: bold; }
+    .pivot-table .status-transport { background: #fff3cd !important; color: #856404; font-weight: bold; }
+    .pivot-table .status-wait { background: #f8d7da !important; color: #721c24; font-weight: bold; }
+    .pivot-table .status-other { background: #f8f9fa !important; color: #6c757d; font-weight: bold; }
+    .pivot-table tr:nth-child(even) {
+      background: #f8f9fa;
+    }
+    .pivot-table tr:hover {
+      background: #e3f2fd !important;
       transform: scale(1.01);
-      box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1);
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
     }
-    .summary-table tr:last-child td {
-      border-bottom: none;
+    .pivot-total {
+      background: linear-gradient(135deg, #dc3545, #c82333) !important;
+      color: #fff !important;
+      font-weight: bold !important;
+      font-size: 15px !important;
+      text-align: center !important;
     }
+    .pivot-total td {
+      border: 2px solid #dc3545 !important;
+    }
+  
     .detail-summary-table {
       width: 100%;
       table-layout: auto;
@@ -477,39 +511,14 @@
     }
     .detail-summary-table .status-success { color: #28a745; font-weight: bold; }
     .detail-summary-table .status-sent { color: #28a745; font-weight: bold; }
-    .detail-summary-table .status-transport { color: #dc3545; font-weight: bold; } /* ===== ใหม่: ระหว่างขนส่ง = ส้มเข้ม ===== */
+    .detail-summary-table .status-transport { color: #fd7e14; font-weight: bold; }
+    .detail-summary-table .status-wait { color: #dc3545; font-weight: bold; }
     #summaryModal .modal-content {
-      max-width: 950px;
-      overflow-x: auto;
-      overflow-y: auto;
-      max-height: 85vh;
-      padding: 25px;
-    }
-    #summaryModal .summary-table {
-      font-size: 15px;
-      min-width: 300px;
-    }
-    #summaryModal .summary-table th,
-    #summaryModal .summary-table td {
-      padding: 12px 10px;
-    }
-    #summaryModal .summary-table th:first-child,
-    #summaryModal .summary-table td:first-child {
-      width: 20%;
-      min-width: 100px;
-    }
-    #summaryModal .summary-table th:nth-child(2),
-    #summaryModal .summary-table td:nth-child(2) {
-      width: 60%;
-      min-width: 150px;
-      max-width: 400px;
-      overflow-wrap: break-word;
-    }
-    #summaryModal .summary-table th:nth-child(3),
-    #summaryModal .summary-table td:nth-child(3) {
-      width: 20%;
-      min-width: 70px;
-      text-align: center;
+      max-width: 85vw !important;
+      max-height: 95vh !important;
+      overflow-x: auto !important;
+      overflow-y: auto !important;
+      padding: 15px !important;
     }
     #detailModal .modal-content {
       max-width: 950px;
@@ -517,10 +526,6 @@
       overflow-y: auto;
       max-height: 85vh;
       padding: 25px;
-    }
-    #detailModal .detail-summary-table th,
-    #detailModal .detail-summary-table td {
-      padding: 12px 15px;
     }
     h2 { font-size: 22px; color: #007bff; text-align: center; margin-bottom: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
     @media print{
@@ -568,12 +573,50 @@
       .modal-content{ margin:2% auto; width:98%; padding:15px; max-height:90vh; }
       table{ min-width:1000px; }
       h2 { font-size: 18px; }
+      /* 🔥 MOBILE PIVOT - ปรับใหม่ให้สมดุล 🔥 */
+      .pivot-table th:first-child, .pivot-table td:first-child {
+        width: 8% !important;
+        min-width: 35px !important;
+        max-width: 45px !important;
+        padding: 8px 2px !important;
+      }
+      .pivot-table th:nth-child(2), .pivot-table td:nth-child(2) {
+        width: 22% !important;
+        min-width: 100px !important;
+        max-width: 120px !important;
+        padding: 8px 4px !important;
+      }
+      .pivot-table th:not(:first-child):not(:nth-child(2)),
+      .pivot-table td:not(:first-child):not(:nth-child(2)) {
+        width: 10% !important;
+        min-width: 50px !important;
+        max-width: 60px !important;
+      }
     }
     @media (max-width: 480px){
       .report-title{ font-size:18px; }
       th,td{ padding:3px 4px; font-size:11px; }
       .detail-button{ width:60px; font-size:9px; padding:3px 6px; }
       h2 { font-size: 16px; }
+      /* 🔥 MOBILE SMALL PIVOT - ปรับใหม่ 🔥 */
+      .pivot-table { font-size: 11px; }
+      .pivot-table th, .pivot-table td { padding: 6px 2px; }
+      .pivot-table th:first-child, .pivot-table td:first-child {
+        width: 10% !important;
+        min-width: 30px !important;
+        max-width: 40px !important;
+      }
+      .pivot-table th:nth-child(2), .pivot-table td:nth-child(2) {
+        width: 25% !important;
+        min-width: 80px !important;
+        max-width: 100px !important;
+      }
+      .pivot-table th:not(:first-child):not(:nth-child(2)),
+      .pivot-table td:not(:first-child):not(:nth-child(2)) {
+        width: 11% !important;
+        min-width: 45px !important;
+        max-width: 55px !important;
+      }
     }
   </style>
 </head>
@@ -617,7 +660,7 @@
       <input type="text" id="searchInput" placeholder="🔍 ค้นหา วันที่รับ, Code, Description, รหัสร้าน, Store Name, อุปกรณ์, WorkOrder, Serial ซ่อม, Serial คืน, TID ซ่อม, TID คืน, อาการ, รหัสช่าง, ชื่อช่าง, คลังพื้นที่, คลังรับคืน, หมายเหตุ, ขนส่ง, นวนคร, ส่งTSC, Status..." />
       <button id="searchButton" class="action-button"><i class="fas fa-search"></i> ค้นหา</button>
       <button id="excelButton" class="action-button"><i class="fas fa-file-excel"></i> Excel</button>
-      <button id="summaryButton" class="action-button"><i class="fas fa-chart-bar"></i> สรุปรอส่งเคลม</button>
+      <button id="summaryButton" class="action-button"><i class="fas fa-table"></i> สรุปข้อมูล</button>
     </div>
   </div>
   <div class="table-container">
@@ -652,7 +695,6 @@
       <tbody></tbody>
     </table>
   </div>
-  <!-- Modals -->
   <div id="detailModal" class="modal">
     <div class="modal-content">
       <span class="close" id="closeModal">×</span>
@@ -667,7 +709,7 @@
   <div id="summaryModal" class="modal">
     <div class="modal-content">
       <span class="close" id="closeSummaryModal">×</span>
-      <h2>สรุปรอส่งเคลม</h2>
+      <h2>สรุปข้อมูล การคืนอะไหล่ TSC Dummy</h2>
       <div id="summaryContent"></div>
     </div>
   </div>
@@ -687,7 +729,6 @@
     </div>
   </div>
   <script>
-    // ===== JavaScript - ปรับ Status ส้มเข้มเท่านั้น =====
     const sheetID = '1A2N5hGjeFljUMa9ouWvlioSIcdj-SpZA708fUczhNV8';
     const sheetName = 'WebTSCDummy';
     const url = `https://opensheet.elk.sh/${sheetID}/${sheetName}`;
@@ -716,6 +757,7 @@
     let itemsPerPage = 20;
     let sortConfig = { column: 'DateKeep', direction: 'desc' };
     let currentRowData = null;
+ 
     function parseDate(dateStr) {
       if (!dateStr || typeof dateStr !== 'string') return new Date(0);
       const parts = dateStr.match(/(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2}):(\d{2})/);
@@ -822,40 +864,112 @@
       link.click();
       URL.revokeObjectURL(link.href);
     }
-    function generateSummary() {
+ 
+    function generatePivotSummary() {
       const currentPlantCall = plantCallFilter.value;
       const currentPlant = plantFilter.value;
       const currentStatus = statusFilter.value;
       const currentSearch = searchInput.value;
-      
+   
       if (!allData || allData.length === 0) {
-        alert("ไม่มีข้อมูลในระบบสำหรับการสรุป");
+        alert("ไม่มีข้อมูลในระบบสำหรับสรุปข้อมูล");
         return;
       }
-      const filtered = allData.filter(row => (row["Status"] || "") === "รอส่งเคลม");
-      const summaryMap = new Map();
-      filtered.forEach(row => {
-        const code = row["Spare Part Code"] || "";
-        if (!code) return;
-        const name = row["Spare Part Name"] || "";
-        const qty = parseFloat(row["Qty"]) || 0;
-        const key = code;
-        if (!summaryMap.has(key)) {
-          summaryMap.set(key, { code, name, totalQty: 0 });
-        }
-        summaryMap.get(key).totalQty += qty;
+   
+      let filteredData = allData.filter(row => {
+        if (!row) return false;
+        return (
+          (!currentPlantCall || (row["PlantCall"] || "") === currentPlantCall) &&
+          (!currentPlant || (row["Plant"] || "") === currentPlant) &&
+          (!currentStatus || (row["Status"] || "") === currentStatus) &&
+          (!currentSearch ||
+            (row["Spare Part Code"] || "").toLowerCase().includes(currentSearch.toLowerCase()) ||
+            (row["Spare Part Name"] || "").toLowerCase().includes(currentSearch.toLowerCase())
+          )
+        );
       });
-      let html = '<table class="summary-table"><thead><tr><th>Code</th><th>Description</th><th>จำนวนรวม</th></tr></thead><tbody>';
-      summaryMap.forEach(({ code, name, totalQty }) => {
-        html += `<tr><td>${code}</td><td style="text-align: left;">${name}</td><td>${totalQty.toFixed(0)}</td></tr>`;
-      });
-      html += '</tbody></table>';
-      if (summaryMap.size === 0) {
-        html = '<p style="text-align: center; font-size: 16px; color: #6c757d;">ไม่มีข้อมูลรอส่งเคลม</p>';
+   
+      if (filteredData.length === 0) {
+        summaryContent.innerHTML = '<p style="text-align: center; font-size: 18px; color: #6c757d;">ไม่มีข้อมูลที่ตรงกับเงื่อนไข</p>';
+        summaryModal.style.display = "block";
+        return;
       }
+   
+      const pivotMap = new Map();
+      filteredData.forEach(row => {
+        const code = row["Spare Part Code"] || "";
+        const name = row["Spare Part Name"] || "";
+        const status = row["Status"] || "อื่นๆ";
+        const qty = parseFloat(row["Qty"]) || 0;
+     
+        if (!code) return;
+     
+        if (!pivotMap.has(code)) {
+          pivotMap.set(code, { code, name, totals: new Map() });
+        }
+        const item = pivotMap.get(code);
+        if (!item.totals.has(status)) {
+          item.totals.set(status, 0);
+        }
+        item.totals.set(status, item.totals.get(status) + qty);
+      });
+   
+      const allStatuses = [...new Set(filteredData.map(row => row["Status"]).filter(Boolean))].sort();
+      if (!allStatuses.includes("อื่นๆ") && filteredData.some(row => !row["Status"])) {
+        allStatuses.push("อื่นๆ");
+      }
+      allStatuses.sort((a, b) => {
+        const order = ["รอส่งเคลม", "ระหว่างขนส่ง", "ส่งTSCแล้ว", "สำเร็จ", "อื่นๆ"];
+        return order.indexOf(a) - order.indexOf(b);
+      });
+   
+      let html = '<table class="pivot-table"><thead><tr><th>Code</th><th>Description</th>';
+      allStatuses.forEach(status => {
+        const className = getStatusClass(status);
+        html += `<th class="${className}">${status}</th>`;
+      });
+      html += '<th class="pivot-total">รวม</th></tr></thead><tbody>';
+   
+      let grandTotal = 0;
+      pivotMap.forEach(item => {
+        let rowTotal = 0;
+        html += `<tr><td>${item.code}</td><td style="text-align: left; padding-left: 12px;">${item.name}</td>`;
+     
+        allStatuses.forEach(status => {
+          const qty = item.totals.get(status) || 0;
+          rowTotal += qty;
+          const className = getStatusClass(status);
+          const displayQty = qty.toFixed(0) === "0" ? "-" : qty.toFixed(0);
+          html += `<td class="${className}">${displayQty}</td>`;
+        });
+     
+        grandTotal += rowTotal;
+        const displayRowTotal = rowTotal.toFixed(0) === "0" ? "-" : rowTotal.toFixed(0);
+        html += `<td class="pivot-total">${displayRowTotal}</td></tr>`;
+      });
+   
+      html += `<tr class="pivot-total"><td colspan="2"><strong>รวมทั้งหมด</strong></td>`;
+      allStatuses.forEach(status => {
+        const statusTotal = Array.from(pivotMap.values()).reduce((sum, item) => sum + (item.totals.get(status) || 0), 0);
+        const displayStatusTotal = statusTotal.toFixed(0) === "0" ? "-" : statusTotal.toFixed(0);
+        html += `<td class="pivot-total">${displayStatusTotal}</td>`;
+      });
+      const displayGrandTotal = grandTotal.toFixed(0) === "0" ? "-" : grandTotal.toFixed(0);
+      html += `<td class="pivot-total"><strong>${displayGrandTotal}</strong></td></tr>`;
+   
+      html += '</tbody></table>';
       summaryContent.innerHTML = html;
       summaryModal.style.display = "block";
     }
+ 
+    function getStatusClass(status) {
+      if (status === "สำเร็จ") return "status-success";
+      if (status === "ส่งTSCแล้ว") return "status-sent";
+      if (status === "ระหว่างขนส่ง") return "status-transport";
+      if (status.includes("รอ")) return "status-wait";
+      return "status-other";
+    }
+ 
     function printModalContent() {
       if (!currentRowData) { alert("ไม่พบข้อมูลสำหรับการพิมพ์"); return; }
       const modalData = currentRowData;
@@ -899,6 +1013,7 @@
       `);
       printWindow.document.close();
     }
+ 
     closeModal.onclick = () => { modal.style.display = "none"; currentRowData = null; };
     closeSummaryModal.onclick = () => { summaryModal.style.display = "none"; };
     window.onclick = e => {
@@ -906,10 +1021,11 @@
       if (e.target == summaryModal) { summaryModal.style.display = "none"; }
     };
     excelButton.addEventListener("click", exportToCSV);
-    summaryButton.addEventListener("click", generateSummary);
+    summaryButton.addEventListener("click", generatePivotSummary);
     itemsPerPageSelect.addEventListener("change", e => { itemsPerPage = parseInt(e.target.value); currentPage = 1; filterAndRenderTable(); });
     searchInput.addEventListener("keypress", e => { if (e.key === "Enter") filterAndRenderTable(); });
     searchButton.addEventListener("click", filterAndRenderTable);
+ 
     function populatePlantCallFilter(data) {
       if (!data || data.length === 0) return;
       const plantCalls = [...new Set(data.map(row => row["PlantCall"]).filter(Boolean))].sort();
@@ -1069,8 +1185,7 @@
       const startIdx = (currentPage - 1) * itemsPerPage;
       const endIdx = startIdx + itemsPerPage;
       const paginatedData = data.slice(startIdx, endIdx);
-      
-      // ===== สร้าง WorkOrder Hash สำหรับสีใหม่ =====
+   
       const workOrderGroups = {};
       data.forEach(row => {
         const wo = row["WorkOrder"];
@@ -1079,15 +1194,15 @@
       });
       const uniqueWorkOrders = Object.keys(workOrderGroups).sort();
       const colorMap = {};
-      uniqueWorkOrders.forEach((wo, index) => { 
-        colorMap[wo] = `wo-color-${index % 8}`; // 8 สีสลับกัน
+      uniqueWorkOrders.forEach((wo, index) => {
+        colorMap[wo] = `wo-color-${index % 8}`;
       });
-      
+   
       paginatedData.forEach((row, i) => {
         const tr = document.createElement("tr");
         tr.style.animationDelay = `${i * 0.05}s`;
         const wo = row["WorkOrder"];
-        tr.className = colorMap[wo] || "wo-color-0"; // ใช้สีตาม WorkOrder
+        tr.className = colorMap[wo] || "wo-color-0";
         const columns = ["Status","DateKeep","Spare Part Code","Spare Part Name","Qty","Store Name","Store Code","อุปกรณ์","WorkOrder","Serial Old","SerialKeep","TIDCall","TID","อาการ","รหัสช่าง","ชื่อช่าง","PlantCall","Plant","Note","DateDelivery","DateCenter","DeliveryTSC_Detail"];
         columns.forEach(col => {
           const td = document.createElement("td");
@@ -1096,29 +1211,28 @@
           if (col === "Qty") {
             displayValue = isNaN(parseFloat(displayValue)) ? "-" : parseFloat(displayValue).toFixed(0);
           } else if (col === "Status") {
-            /* ===== ปรับใหม่: เพิ่ม ระหว่างขนส่ง = ส้มเข้ม ===== */
-            if (cellValue === "สำเร็จ") { 
-              displayValue = "สำเร็จ"; 
-              td.style.color = "#28a745"; 
-              td.style.fontWeight = "bold"; 
+            if (cellValue === "สำเร็จ") {
+              displayValue = "สำเร็จ";
+              td.style.color = "#28a745";
+              td.style.fontWeight = "bold";
             }
-            else if (cellValue === "ส่งTSCแล้ว") { 
-              displayValue = "ส่งTSCแล้ว"; 
-              td.style.color = "#28a745"; 
-              td.style.fontWeight = "bold"; 
+            else if (cellValue === "ส่งTSCแล้ว") {
+              displayValue = "ส่งTSCแล้ว";
+              td.style.color = "#28a745";
+              td.style.fontWeight = "bold";
             }
-            else if (cellValue === "ระหว่างขนส่ง") { 
-              displayValue = "ระหว่างขนส่ง"; 
-              td.style.color = "#fd7e14"; 
-              td.style.fontWeight = "bold"; 
+            else if (cellValue === "ระหว่างขนส่ง") {
+              displayValue = "ระหว่างขนส่ง";
+              td.style.color = "#fd7e14";
+              td.style.fontWeight = "bold";
             }
-            else if (cellValue.includes("รอ")) { 
-              displayValue = cellValue; 
-              td.style.color = "#dc3545"; 
-              td.style.fontWeight = "bold"; 
+            else if (cellValue.includes("รอ")) {
+              displayValue = cellValue;
+              td.style.color = "#dc3545";
+              td.style.fontWeight = "bold";
             }
-            else { 
-              td.style.color = "#6c757d"; 
+            else {
+              td.style.color = "#6c757d";
             }
           }
           td.textContent = displayValue;
@@ -1161,7 +1275,6 @@
             if (key === "Qty") value = isNaN(parseFloat(value)) ? "-" : parseFloat(value).toFixed(0);
             let valueHtml = value;
             if (key === "Status") {
-              /* ===== ปรับใหม่: เพิ่ม ระหว่างขนส่ง = ส้มเข้มใน Modal ===== */
               if (value === "สำเร็จ") valueHtml = '<span class="status-success">สำเร็จ</span>';
               else if (value === "ส่งTSCแล้ว") valueHtml = '<span class="status-sent">ส่งTSCแล้ว</span>';
               else if (value === "ระหว่างขนส่ง") valueHtml = '<span class="status-transport">ระหว่างขนส่ง</span>';
