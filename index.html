@@ -451,15 +451,20 @@
       transform: scale(1.01);
       box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
     }
+    .pivot-table tr.pivot-total:hover {
+      background: linear-gradient(135deg, #007bff, #0056b3) !important;
+      transform: none !important;
+      box-shadow: none !important;
+    }
     .pivot-total {
-      background: linear-gradient(135deg, #dc3545, #c82333) !important;
+      background: linear-gradient(135deg, #007bff, #0056b3) !important;
       color: #fff !important;
       font-weight: bold !important;
       font-size: 15px !important;
       text-align: center !important;
     }
     .pivot-total td {
-      border: 2px solid #dc3545 !important;
+      border: 2px solid #007bff !important;
     }
   
     .detail-summary-table {
@@ -709,7 +714,7 @@
   <div id="summaryModal" class="modal">
     <div class="modal-content">
       <span class="close" id="closeSummaryModal">×</span>
-      <h2>สรุปข้อมูล การคืนอะไหล่ TSC Dummy</h2>
+      <h2>สรุปข้อมูล - Code x Status</h2>
       <div id="summaryContent"></div>
     </div>
   </div>
@@ -919,7 +924,7 @@
         allStatuses.push("อื่นๆ");
       }
       allStatuses.sort((a, b) => {
-        const order = ["รอส่งเคลม", "ระหว่างขนส่ง", "ส่งTSCแล้ว", "สำเร็จ", "อื่นๆ"];
+        const order = ["คลังพื้นที่", "ระหว่างขนส่ง", "รอส่งเคลม", "ส่งTSCแล้ว", "สำเร็จ", "อื่นๆ"];
         return order.indexOf(a) - order.indexOf(b);
       });
    
@@ -967,6 +972,7 @@
       if (status === "ส่งTSCแล้ว") return "status-sent";
       if (status === "ระหว่างขนส่ง") return "status-transport";
       if (status.includes("รอ")) return "status-wait";
+      if (status === "คลังพื้นที่") return "status-other";
       return "status-other";
     }
  
